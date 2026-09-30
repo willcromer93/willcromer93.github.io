@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sports Hub · Will Cromer</title>
+<meta name="description" content="How I built Sports Hub: a self-hosted Python + PostgreSQL sports data pipeline and dashboard.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3EWC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Will Cromer</a>
+  <ul>
+    <li><a class="navlink" href="index.html">About</a></li>
+    <li><a class="navlink" href="data-viz.html">Data Viz</a></li>
+    <li><a class="navlink" href="sports-hub.html" aria-current="page">Sports Hub</a></li>
+    <li><a class="navlink" href="mission-control-ai.html">Mission Control AI</a></li>
+  </ul>
+</div></nav>
+
+<main>
+  <!-- ===== Header ===== -->
+  <header class="page-head"><div class="wrap">
+    <p class="eyebrow">Project · Data engineering</p>
+    <h1>Sports Hub</h1>
+    <p class="lead">A self-hosted data pipeline and dashboard for the teams I follow: the Indiana Pacers, Purdue Boilermakers, Indianapolis Colts, and Detroit Red Wings. Python pulls data from three sports APIs into PostgreSQL, and it all runs 24/7 on a home server.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://sportshub.taildca027.ts.net/team" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>
+        View live site
+      </a>
+      <a class="btn" href="https://github.com/willcromer93/sports-hub" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+        GitHub repo
+      </a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><b>4</b><span>teams across NBA, NCAAB, NFL, NHL</span></div>
+      <div class="stat"><b>3</b><span>external APIs integrated</span></div>
+      <div class="stat"><b>24/7</b><span>self-hosted on a Linux home server</span></div>
+      <div class="stat"><b>$0</b><span>in API and software costs</span></div>
+    </div>
+  </div></header>
+
+  <!-- ===== Why ===== -->
+  <section><div class="wrap">
+    <p class="eyebrow">The why</p>
+    <h2>Why I built it</h2>
+    <div class="grid cols-2">
+      <div class="card"><h3>Learn by building</h3><p>I came into data engineering strong on concepts and visualization but light on hands-on Python and SQL. A real project with messy APIs and a real database teaches more than tutorials do, so the goal was to learn the craft, not just ship an app.</p></div>
+      <div class="card"><h3>One place for my teams</h3><p>My four teams span four leagues and four different corners of ESPN. I wanted rosters, scores, and stats together in one dashboard built the way I'd want to read it.</p></div>
+      <div class="card"><h3>Deeper than the box score</h3><p>It's built for a small group of friends and family. The goal is more charts, trends, and context than the major sports apps give you.</p></div>
+      <div class="card"><h3>Keep it free</h3><p>Free APIs, open-source tools, and hardware I already own. It's a constraint I set on purpose, and it forced some useful engineering decisions about what's worth building.</p></div>
+    </div>
+  </div></section>
+
+  <!-- ===== Architecture ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">The how</p>
+    <h2>How it works</h2>
+    <p class="lead">A classic extract → load → serve pipeline, sized for a single home server.</p>
+    <div class="diagram" role="img" aria-label="Architecture: three sports APIs feed Python extract scripts, which upsert into PostgreSQL on a home server; the web dashboard reads from Postgres and is served securely over Tailscale.">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" style="fill:var(--muted)"/></marker>
+        </defs>
+        <style>
+          .box{fill:var(--surface-2);stroke:var(--border);stroke-width:1.5}
+          .hl{fill:var(--surface);stroke:var(--accent);stroke-width:2}
+          .t{fill:var(--text);font-size:15px;font-weight:600}
+          .s{fill:var(--muted);font-size:12px}
+          .ln{stroke:var(--muted);stroke-width:1.5;fill:none}
+          .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5;opacity:.6}
+          .z{fill:var(--accent);font-size:12px;font-weight:600;letter-spacing:.06em}
+        </style>
+        <!-- Sources -->
+        <text x="20" y="28" class="z">SOURCES</text>
+        <rect class="box" x="20" y="44" width="170" height="60" rx="10"/><text x="36" y="70" class="t">ESPN API</text><text x="36" y="90" class="s">rosters · teams · games</text>
+        <rect class="box" x="20" y="120" width="170" height="60" rx="10"/><text x="36" y="146" class="t">balldontlie.io</text><text x="36" y="166" class="s">NBA · NCAAB (API key)</text>
+        <rect class="box" x="20" y="196" width="170" height="60" rx="10"/><text x="36" y="222" class="t">NHL Web API</text><text x="36" y="242" class="s">schedules</text>
+        <!-- Server zone -->
+        <rect class="zone" x="240" y="14" width="440" height="272" rx="14"/>
+        <text x="256" y="36" class="z">HOME SERVER · LINUX · 24/7</text>
+        <rect class="hl" x="260" y="110" width="170" height="80" rx="10"/><text x="276" y="140" class="t">Python ETL</text><text x="276" y="160" class="s">api_pulls.py → db.py</text><text x="276" y="176" class="s">parameterized upserts</text>
+        <rect class="hl" x="490" y="110" width="170" height="80" rx="10"/><text x="506" y="140" class="t">PostgreSQL</text><text x="506" y="160" class="s">sports_hub database</text><text x="506" y="176" class="s">teams · players · stats</text>
+        <rect class="box" x="490" y="210" width="170" height="56" rx="10"/><text x="506" y="234" class="t">Web dashboard</text><text x="506" y="252" class="s">reads from Postgres</text>
+        <!-- Edge -->
+        <text x="710" y="28" class="z">ACCESS</text>
+        <rect class="box" x="710" y="210" width="170" height="56" rx="10"/><text x="726" y="234" class="t">Tailscale HTTPS</text><text x="726" y="252" class="s">no open router ports</text>
+        <rect class="box" x="710" y="110" width="170" height="80" rx="10"/><text x="726" y="144" class="t">Friends &amp; family</text><text x="726" y="164" class="s">phone or browser</text>
+        <!-- Lines -->
+        <path class="ln" d="M190 74 H222 V150 H258" marker-end="url(#arr)"/>
+        <path class="ln" d="M190 150 H258"/>
+        <path class="ln" d="M190 226 H222 V150"/>
+        <path class="ln" d="M430 150 H488" marker-end="url(#arr)"/>
+        <path class="ln" d="M575 190 V208" marker-end="url(#arr)"/>
+        <path class="ln" d="M660 238 H708" marker-end="url(#arr)"/>
+        <path class="ln" d="M795 210 V192" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+    <div class="grid cols-3" style="margin-top:16px">
+      <div class="card"><h3>1 · Extract</h3><p>Python scripts call the ESPN, balldontlie, and NHL APIs. A reusable helper, <code>extract_espn_fields()</code>, normalizes ESPN's nested JSON so every sport comes out in the same shape.</p></div>
+      <div class="card"><h3>2 · Load</h3><p><code>db.py</code> writes to PostgreSQL through <code>psycopg2</code> with parameterized queries and <code>ON CONFLICT … DO UPDATE</code> upserts. The pipeline can re-run safely without creating duplicates.</p></div>
+      <div class="card"><h3>3 · Serve</h3><p>Postgres and the dashboard run on a home Linux server, reachable over Tailscale's encrypted network with HTTPS and no ports open on my router. Development happens on my Mac against a local Postgres copy.</p></div>
+    </div>
+  </div></section>
+
+  <!-- ===== Decisions ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Engineering decisions</p>
+    <h2>The choices that mattered</h2>
+    <div class="grid cols-2">
+      <div class="card decision"><h3>Long-format stats table</h3><p>Basketball, football, and hockey track completely different stats. Instead of a wide table full of empty columns, stats are stored one row per player, per game, per stat. Adding a new sport doesn't change the schema at all.</p></div>
+      <div class="card decision"><h3>Shared tables, not per-team tables</h3><p>One <code>teams</code> table and one <code>players</code> table filtered by <code>team_id</code>, instead of a table per team. That means less to maintain, and cross-team queries become one simple <code>SELECT</code>.</p></div>
+      <div class="card decision"><h3>Stable external IDs</h3><p>Upserts match on <code>(league, external_id)</code>. When I moved the database to the server, I found a duplicate Colts row caused by mixing two ID sources. Lesson: never swap an ID source mid-project, or matches silently fail and duplicates pile up.</p></div>
+      <div class="card decision"><h3>Consolidate on one API where possible</h3><p>Digging into ESPN's hockey endpoint showed it had richer data than expected (handedness, structured injury info). Using ESPN across sports cut down the number of API formats the code has to handle.</p></div>
+      <div class="card decision"><h3>Hardcode when the source has gaps</h3><p>ESPN returns no venue data for college basketball, so Purdue's arena and city, plus each team's founding year, are hardcoded. It's a deliberate trade-off: a few static values beat a brittle workaround.</p></div>
+      <div class="card decision"><h3>Secure, headless deployment</h3><p>The server pulls code from GitHub with a read-only SSH deploy key. Secrets live in a <code>.env</code> file that never touches Git, and <code>psycopg2-binary</code> avoids compile failures on ARM hardware.</p></div>
+    </div>
+  </div></section>
+
+  <!-- ===== Skills ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Skills used</p>
+    <h2>What this project exercises</h2>
+    <div class="grid cols-3">
+      <div class="card"><h3>Data engineering</h3><div class="chips"><span class="chip">ETL pipelines</span><span class="chip">REST APIs</span><span class="chip">JSON parsing</span><span class="chip">Idempotent upserts</span><span class="chip">Data modeling</span></div></div>
+      <div class="card"><h3>Languages &amp; data</h3><div class="chips"><span class="chip">Python</span><span class="chip">SQL</span><span class="chip">PostgreSQL</span><span class="chip">psycopg2</span><span class="chip">requests</span><span class="chip">python-dotenv</span></div></div>
+      <div class="card"><h3>Ops &amp; tooling</h3><div class="chips"><span class="chip">Linux</span><span class="chip">Raspberry Pi</span><span class="chip">SSH deploy keys</span><span class="chip">Tailscale</span><span class="chip">Git / GitHub</span><span class="chip">VS Code</span><span class="chip">Ruff / Black</span><span class="chip">AI-assisted dev (Claude Code)</span></div></div>
+    </div>
+  </div></section>
+
+  <!-- ===== Lessons ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Takeaways</p>
+    <h2>What I learned</h2>
+    <div class="card">
+      <ul>
+        <li><b>Trust the database, not the docs.</b> I verify state with SQL queries instead of assuming my notes are current.</li>
+        <li><b>Unofficial APIs are best-effort.</b> ESPN and NHL endpoints are undocumented and can change without warning, so the extract layer is kept isolated and easy to patch.</li>
+        <li><b>Hardware constraints shape design.</b> A small home server means efficient queries and nightly batch loads instead of live polling.</li>
+        <li><b>Documentation is part of the product.</b> A living <code>SCHEMA.md</code> and project notes file keep the project understandable weeks later.</li>
+      </ul>
+    </div>
+  </div></section>
+
+  <!-- ===== Status ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Status &amp; roadmap</p>
+    <h2>Where it's headed</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 class="status-live">● Live now</h3>
+        <ul>
+          <li>Team and roster pages for all four teams</li>
+          <li>Scores and stats</li>
+          <li>Pipeline and database running unattended on the home server</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="status-next">● Up next</h3>
+        <ul>
+          <li>Expand to full leagues: NFL, NBA, NHL, MLB, WNBA, college football, and college basketball</li>
+          <li>User sign-ins with saved favorite teams and dedicated team pages</li>
+          <li>Roster-departure detection, so players who leave a team are flagged instead of lingering</li>
+          <li>Historical trends and betting-line analysis</li>
+        </ul>
+      </div>
+    </div>
+    <div class="btns" style="margin-top:28px">
+      <a class="btn primary" href="https://sportshub.taildca027.ts.net/team" target="_blank" rel="noopener">View live site ↗</a>
+      <a class="btn" href="https://github.com/willcromer93/sports-hub" target="_blank" rel="noopener">GitHub repo ↗</a>
+      <a class="btn" href="index.html#projects">← All projects</a>
+    </div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <small>© <span class="yr">2026</span> Will Cromer</small>
+  <div class="social">
+    <a href="https://www.linkedin.com/in/will-cromer" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.6 8.65 21 11.2 21 14.5V21h-4v-5.8c0-1.4 0-3.2-1.95-3.2S12.8 13.5 12.8 15.1V21H9z"/></svg></a>
+    <a href="https://github.com/willcromer93" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+    <a href="mailto:willcromer34@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+  </div>
+</div></footer>
+<script>document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear())</script>
+</body>
+</html>

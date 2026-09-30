@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mission Control VR + AI Agent · Will Cromer</title>
+<meta name="description" content="Capstone with Johns Hopkins APL: a VR NASA Mission Control Center with a RAG-powered AI agent. I built the AWS + FastAPI backend.">
+<meta property="og:image" content="https://willcromer93.github.io/assets/mcc-environment.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3EWC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Will Cromer</a>
+  <ul>
+    <li><a class="navlink" href="index.html">About</a></li>
+    <li><a class="navlink" href="data-viz.html">Data Viz</a></li>
+    <li><a class="navlink" href="sports-hub.html">Sports Hub</a></li>
+    <li><a class="navlink" href="mission-control-ai.html" aria-current="page">Mission Control AI</a></li>
+  </ul>
+</div></nav>
+
+<main>
+  <!-- ===== Header ===== -->
+  <header class="page-head"><div class="wrap">
+    <p class="eyebrow">Project · Purdue capstone × Johns Hopkins APL</p>
+    <h1>Mission Control VR + AI Agent</h1>
+    <p class="lead">A virtual reality recreation of NASA's Johnson Space Center Mission Control Center with a voice-driven AI agent that answers questions like a real flight controller. The agent's knowledge comes from interviews with human-spaceflight experts. I built the cloud RAG backend that powers it, and co-authored the team's research paper, which is pending publication.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://www.youtube.com/watch?v=LH1G0Wwj9_8&amp;t=291s" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch presentation</a>
+      <a class="btn" href="https://github.com/ChawinMin/VR-AI-MCC-NASA-JSC" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub repo</a>
+    </div>
+    <div class="chips" style="margin-top:16px">
+      <span class="chip">Team of 7 · Immersive Experience Laboratory (IXL)</span>
+      <span class="chip">Sponsor: Johns Hopkins Applied Physics Laboratory</span>
+      <span class="chip">CGT 411/412 · 2025–26</span>
+      <span class="chip">Research paper · co-author · publication pending</span>
+      <span class="chip">My role: Data Analyst / backend</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><b>11</b><span>expert interviews (28 experts contacted)</span></div>
+      <div class="stat"><b>4–5 s</b><span>average voice question → spoken answer</span></div>
+      <div class="stat"><b>3</b><span>expert evaluation sessions</span></div>
+      <div class="stat"><b>34</b><span>questionnaire respondents analyzed</span></div>
+    </div>
+    <figure style="margin-top:28px">
+      <img src="assets/mcc-environment.jpg" alt="The virtual Mission Control Center in Unity: rows of consoles facing the front wall of large mission displays" style="width:100%;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow)" loading="lazy">
+      <figcaption class="muted" style="font-size:13px;margin-top:8px">The virtual NASA JSC Mission Control Center, built to scale in Unity from NASA's public 3D tour and image gallery.</figcaption>
+    </figure>
+  </div></header>
+
+  <!-- ===== Problem ===== -->
+  <section><div class="wrap">
+    <p class="eyebrow">The challenge</p>
+    <h2>Static docs can't capture how Mission Control works</h2>
+    <div class="prose">
+      <p>Johns Hopkins APL's design strategists came to us with a problem. Traditional design documentation doesn't capture the complexity of mission-critical systems: who the users are, what pressures they work under, and why the system was designed the way it was. Their challenge to us:</p>
+      <p class="muted" style="border-left:3px solid var(--accent);padding-left:14px;font-style:italic">"How might we communicate user needs and design decisions of spatial immersive design deliverables in a way that is interactive, empathetic, and enduring?"</p>
+      <p>Our answer was a proof of concept. Instead of reading a document, a stakeholder puts on a VR headset, stands inside Mission Control, and asks an AI agent what a flight controller actually does, how they make decisions, or what happens in an emergency.</p>
+    </div>
+  </div></section>
+
+  <!-- ===== Full scope ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Full scope</p>
+    <h2>What the team built</h2>
+    <div class="grid cols-3">
+      <div class="card"><h3>Expert research</h3><p>We contacted 28 experts through APL, NASA JSC, and Barrios Technology, and ran 11 in-depth interviews with astronauts, flight directors, flight controllers (EVA, ETHOS, CAPCOM), an increment engineer, and UX designers. An affinity diagram sorted the insights into communication, decision-making, conflict resolution, training, and visibility.</p></div>
+      <div class="card"><h3>VR Mission Control</h3><p>A to-scale Unity recreation of the JSC Mission Control Center, with consoles arranged to match the real room, front-wall displays, and real NASA mission emblems. It runs on a Meta Quest 3 (standalone or tethered) and on desktop, and users teleport between consoles.</p></div>
+      <div class="card"><h3>Voice AI agent</h3><p>Users talk to the agent naturally. Speech is transcribed with OpenAI's Whisper, answered by the RAG backend from the expert knowledge base, and spoken back with ElevenLabs text-to-speech. NASA's "Rules of Human Spaceflight" (crew, then vehicle, then mission) are built into its system prompt.</p></div>
+    </div>
+    <div class="grid cols-3" style="margin-top:16px">
+      <div class="card"><h3>User testing</h3><p>Three experts returned to test the prototype: a flight controller, an increment engineer, and a flight dynamics officer. They checked the room's layout for accuracy and questioned the agent to look for made-up answers.</p></div>
+      <div class="card"><h3>Public questionnaire</h3><p>34 students, faculty, and professionals watched a demo of the agent and wrote the questions they'd ask it. That showed us where the knowledge base had gaps.</p></div>
+      <div class="card"><h3>Research paper &amp; presentation</h3><p>A research paper co-authored with our APL mentors (publication pending), <em>"Exploring a Virtual Reality Representation of the Mission Control Center with an Intelligent Virtual Agent for NASA's Space Operations,"</em> plus a recorded presentation and an open-source GitHub repo.</p></div>
+    </div>
+  </div></section>
+
+  <!-- ===== My role ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">What I did</p>
+    <h2>My contributions</h2>
+    <p class="lead">I joined the team as the Data Analyst, the only data-focused member alongside UX, game development, and XR specialists. I ended up owning the AI's backend end to end.</p>
+    <div class="card mine" style="margin-top:20px">
+      <div class="role-list">
+        <div class="r"><span class="n">1</span><div><h3>Designed and deployed the RAG server on AWS</h3><p>I launched and configured an Ubuntu EC2 instance and set up the network rules for SSH and the API port. On it I built a Python FastAPI service that sits between Unity and OpenAI, so the VR app never talks to OpenAI directly.</p></div></div>
+        <div class="r"><span class="n">2</span><div><h3>Built the API the VR app calls</h3><p><code>GET /</code> is a health check, and <code>POST /ask</code> takes a user's question. It validates the input and runs the OpenAI Responses API (GPT-4.1 nano) with a file-search tool over our vector store. It returns a grounded answer, with typed request and response models (Pydantic) and clear error handling.</p></div></div>
+        <div class="r"><span class="n">3</span><div><h3>Built the knowledge base pipeline</h3><p>I wrote <code>upload_pdfs.py</code> to batch-load research and interview PDFs into an OpenAI vector store, which splits them into chunks and embeds them automatically. We organized the PDFs by Mission Control position, with subsections for leadership, decision-making, and communication. That structure made the agent sound like someone who actually works in MCC instead of a generic chatbot.</p></div></div>
+        <div class="r"><span class="n">4</span><div><h3>Secured the secrets</h3><p>The OpenAI API key lives encrypted in AWS Systems Manager Parameter Store as a SecureString. It's read at startup through an IAM role attached to the instance (least-privilege, read-only access to parameters). Nothing sensitive is in the code or on disk.</p></div></div>
+        <div class="r"><span class="n">5</span><div><h3>Kept it running 24/7</h3><p>I ran the API with Uvicorn under a <code>systemd</code> service that auto-starts on boot and restarts on failure. Teammates could demo and test anytime without anyone starting the server by hand.</p></div></div>
+        <div class="r"><span class="n">6</span><div><h3>Onboarded the team and documented the system</h3><p>I wrote the team's RAG/AWS runbook and SSH access guides for Mac and Windows, and set up individual server accounts so teammates could add to the knowledge base on their own. I co-authored the research paper and wrote its RAG pipeline and AWS server architecture sections.</p></div></div>
+        <div class="r"><span class="n">7</span><div><h3>Analyzed the public questionnaire</h3><p>I cleaned the survey responses and analyzed them in Python (Google Colab), categorizing the free-text questions people wanted to ask the agent. The results, summarized below, guided which topics we expanded in the knowledge base.</p></div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ===== Architecture ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Architecture</p>
+    <h2>How a question gets answered</h2>
+    <div class="diagram" role="img" aria-label="A user speaks in VR; Unity transcribes with Whisper and sends POST /ask to a FastAPI server on AWS EC2. The server reads its API key from Parameter Store via an IAM role, queries OpenAI with file search over the vector store knowledge base, and returns an answer that ElevenLabs speaks back in VR.">
+      <svg viewBox="0 0 900 330" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif">
+        <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" style="fill:var(--muted)"/></marker></defs>
+        <style>
+          .box{fill:var(--surface-2);stroke:var(--border);stroke-width:1.5}
+          .hl{fill:var(--surface);stroke:var(--accent);stroke-width:2}
+          .t{fill:var(--text);font-size:15px;font-weight:600}
+          .s{fill:var(--muted);font-size:12px}
+          .ln{stroke:var(--muted);stroke-width:1.5;fill:none}
+          .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5;opacity:.6}
+          .z{fill:var(--accent);font-size:12px;font-weight:600;letter-spacing:.06em}
+          .lab{fill:var(--muted);font-size:11px}
+        </style>
+        <text x="20" y="28" class="z">VR CLIENT</text>
+        <rect class="box" x="20" y="44" width="180" height="62" rx="10"/><text x="36" y="70" class="t">User in headset</text><text x="36" y="90" class="s">asks a question aloud</text>
+        <rect class="box" x="20" y="134" width="180" height="62" rx="10"/><text x="36" y="160" class="t">Unity app</text><text x="36" y="180" class="s">Whisper speech → text</text>
+        <rect class="box" x="20" y="224" width="180" height="62" rx="10"/><text x="36" y="250" class="t">ElevenLabs</text><text x="36" y="270" class="s">answer → spoken voice</text>
+
+        <rect class="zone" x="250" y="14" width="360" height="300" rx="14"/>
+        <text x="266" y="36" class="z">AWS · BUILT BY ME</text>
+        <rect class="hl" x="270" y="118" width="320" height="92" rx="10"/>
+        <text x="288" y="146" class="t">FastAPI on EC2 (Ubuntu)</text>
+        <text x="288" y="166" class="s">GET /  health check · POST /ask</text>
+        <text x="288" y="184" class="s">Uvicorn + systemd · runs 24/7</text>
+        <text x="288" y="200" class="s">Pydantic validation · error handling</text>
+        <rect class="box" x="270" y="46" width="320" height="50" rx="10"/><text x="288" y="68" class="t">Parameter Store</text><text x="288" y="86" class="s">encrypted API key · read via IAM role</text>
+        <rect class="box" x="270" y="234" width="320" height="56" rx="10"/><text x="288" y="258" class="t">upload_pdfs.py</text><text x="288" y="276" class="s">interview + research PDFs → vector store</text>
+
+        <text x="660" y="28" class="z">OPENAI</text>
+        <rect class="box" x="660" y="118" width="220" height="92" rx="10"/><text x="676" y="146" class="t">Responses API</text><text x="676" y="166" class="s">GPT-4.1 nano (low latency)</text><text x="676" y="184" class="s">+ file_search tool</text>
+        <rect class="box" x="660" y="234" width="220" height="56" rx="10"/><text x="676" y="258" class="t">Vector store</text><text x="676" y="276" class="s">chunked + embedded MCC knowledge</text>
+
+        <path class="ln" d="M110 106 V132" marker-end="url(#a2)"/>
+        <path class="ln" d="M200 158 H268" marker-end="url(#a2)"/><text x="206" y="150" class="lab">POST /ask</text>
+        <path class="ln" d="M268 190 H230 V255 H202" marker-end="url(#a2)"/><text x="206" y="246" class="lab">answer</text>
+        <path class="ln" d="M430 116 V98" marker-end="url(#a2)"/>
+        <path class="ln" d="M590 164 H658" marker-end="url(#a2)"/>
+        <path class="ln" d="M770 210 V232" marker-end="url(#a2)"/>
+        <path class="ln" d="M590 262 H658" marker-end="url(#a2)"/>
+      </svg>
+    </div>
+
+    <p class="muted" style="margin-top:20px">The core of <code>server.py</code>, the endpoint Unity calls:</p>
+<pre class="code"><span class="c"># Key pulled from AWS Parameter Store at startup: never in code</span>
+client = OpenAI(api_key=get_openai_key())
+
+<span class="k">@app.post</span>(<span class="s">"/ask"</span>, response_model=Answer)
+<span class="k">def</span> ask_ai(data: Question):
+    <span class="k">if not</span> data.question.strip():
+        <span class="k">raise</span> HTTPException(status_code=400, detail=<span class="s">"Question cannot be empty"</span>)
+    <span class="k">try</span>:
+        response = client.responses.create(
+            model=<span class="s">"gpt-4.1-nano"</span>,
+            input=data.question,
+            tools=[{<span class="s">"type"</span>: <span class="s">"file_search"</span>,
+                    <span class="s">"vector_store_ids"</span>: [VECTOR_STORE_ID]}],
+        )
+        <span class="k">return</span> Answer(answer=response.output_text)
+    <span class="k">except</span> Exception:
+        logging.exception(<span class="s">"OpenAI request failed"</span>)
+        <span class="k">raise</span> HTTPException(status_code=500, detail=<span class="s">"AI service failed"</span>)</pre>
+  </div></section>
+
+  <!-- ===== Decisions ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Engineering decisions</p>
+    <h2>Why it's built this way</h2>
+    <div class="grid cols-2">
+      <div class="card decision"><h3>RAG instead of a plain chatbot</h3><p>A general language model knows little about day-to-day life in Mission Control, and what it does know can be wrong or out of date. Retrieval grounds every answer in our own expert interviews and training material, and the knowledge base can be updated by uploading a PDF, with no retraining.</p></div>
+      <div class="card decision"><h3>A server in the middle</h3><p>Routing Unity → AWS → OpenAI keeps the API key off every headset and laptop. It also means one place to update prompts or knowledge, and each piece can be debugged on its own.</p></div>
+      <div class="card decision"><h3>Parameter Store + IAM over .env files</h3><p>With seven people sharing one server, a plaintext key file was a real leak risk. An encrypted SecureString behind a read-only IAM role meant nobody needed to see or handle the key.</p></div>
+      <div class="card decision"><h3>Small, cheap, always on</h3><p>A t3.micro instance and OpenAI's smallest GPT-4.1 model kept costs low and answers fast, about 4–5 seconds from spoken question to spoken reply. systemd made it dependable for demos with no manual steps.</p></div>
+    </div>
+  </div></section>
+
+  <!-- ===== Survey results ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Data analysis</p>
+    <h2>What people wanted to ask the agent</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Question categories</h3>
+        <p style="font-size:13px">n = 34 respondents · 55 tallies across 8 categories (a question can fall into more than one)</p>
+        <div class="barrow">Mission &amp; spacecraft operations <b>14</b><div class="bar"><i style="width:100.0%"></i></div></div>
+        <div class="barrow">Emergency &amp; crisis procedures <b>13</b><div class="bar"><i style="width:92.9%"></i></div></div>
+        <div class="barrow">Roles &amp; responsibilities <b>12</b><div class="bar"><i style="width:85.7%"></i></div></div>
+        <div class="barrow">Risk assessment <b>8</b><div class="bar"><i style="width:57.1%"></i></div></div>
+        <div class="barrow">MCC organization &amp; layout <b>5</b><div class="bar"><i style="width:35.7%"></i></div></div>
+        <div class="barrow">Communication <b>4</b><div class="bar"><i style="width:28.6%"></i></div></div>
+        <div class="barrow">Training &amp; simulation <b>4</b><div class="bar"><i style="width:28.6%"></i></div></div>
+        <div class="barrow">AI capabilities &amp; trust <b>2</b><div class="bar"><i style="width:14.3%"></i></div></div>
+      </div>
+      <div class="card">
+        <h3>What it told us</h3>
+        <ul>
+          <li><b>77.8%</b> of respondents were undergraduates; the rest were graduate students and industry professionals.</li>
+          <li>The top three categories (operations, emergencies, and who's responsible for what) accounted for <b>39 of 55</b> tallies, about 71%.</li>
+          <li>Almost nobody asked about the AI itself (2 tallies). People wanted to learn Mission Control, not the technology.</li>
+          <li>We added more knowledge-base content on the top three topics as a result.</li>
+        </ul>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ===== Results ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Evaluation</p>
+    <h2>How it performed</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 class="status-live">● What worked</h3>
+        <ul>
+          <li>Experts called the experience "amazing," saying it exceeded their expectations.</li>
+          <li>Knowledge questions were strong. Asked what the Increment Management Center is, the agent gave an answer an expert called "very well summarized."</li>
+          <li>Voice round trip averaged 4–5 seconds, and it ran smoothly on desktop and on the Quest 3.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="status-next">● What we'd improve</h3>
+        <ul>
+          <li>Situational questions got "the gist" but missed back-end planning details, so the agent needs deeper scenario reasoning.</li>
+          <li>One answer expanded ADCO as "<i>Altitude</i> Determination and Control Officer" instead of <i>Attitude</i>. It's fixable in the vector store, but it shows why AI output stays decision support that needs human oversight.</li>
+          <li>Next steps from the paper: lower latency, a broader knowledge base, and an "inspector" agent to catch errors.</li>
+        </ul>
+      </div>
+    </div>
+    <figure style="margin-top:20px">
+      <img src="assets/mcc-agent-ui.jpg" alt="Agent interface in the virtual MCC showing the unmute prompt and listening indicator in front of the mission displays" style="width:100%;border-radius:var(--radius);border:1px solid var(--border)" loading="lazy">
+      <figcaption class="muted" style="font-size:13px;margin-top:8px">The agent interface: mute/unmute control plus indicators for listening, processing, and speaking.</figcaption>
+    </figure>
+  </div></section>
+
+  <!-- ===== Skills ===== -->
+  <section style="padding-top:0"><div class="wrap">
+    <p class="eyebrow">Skills used</p>
+    <h2>What this project exercised</h2>
+    <div class="grid cols-3">
+      <div class="card"><h3>AI / LLM</h3><div class="chips"><span class="chip">Retrieval-augmented generation</span><span class="chip">OpenAI Responses API</span><span class="chip">Vector stores &amp; embeddings</span><span class="chip">Whisper</span><span class="chip">ElevenLabs</span></div></div>
+      <div class="card"><h3>Backend &amp; cloud</h3><div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Pydantic</span><span class="chip">Uvicorn</span><span class="chip">AWS EC2</span><span class="chip">IAM</span><span class="chip">SSM Parameter Store</span><span class="chip">boto3</span><span class="chip">Linux / systemd</span><span class="chip">SSH</span></div></div>
+      <div class="card"><h3>Data &amp; collaboration</h3><div class="chips"><span class="chip">Survey analysis</span><span class="chip">Google Colab</span><span class="chip">Technical writing</span><span class="chip">Research writing</span><span class="chip">Cross-disciplinary team</span><span class="chip">Sponsor communication</span></div></div>
+    </div>
+    <div class="btns" style="margin-top:28px">
+      <a class="btn primary" href="https://www.youtube.com/watch?v=LH1G0Wwj9_8&amp;t=291s" target="_blank" rel="noopener">Watch presentation ↗</a>
+      <a class="btn" href="https://github.com/ChawinMin/VR-AI-MCC-NASA-JSC" target="_blank" rel="noopener">GitHub repo ↗</a>
+      <a class="btn" href="index.html#projects">← All projects</a>
+    </div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <small>© <span class="yr">2026</span> Will Cromer</small>
+  <div class="social">
+    <a href="https://www.linkedin.com/in/will-cromer" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.6 8.65 21 11.2 21 14.5V21h-4v-5.8c0-1.4 0-3.2-1.95-3.2S12.8 13.5 12.8 15.1V21H9z"/></svg></a>
+    <a href="https://github.com/willcromer93" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+    <a href="mailto:willcromer34@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+  </div>
+</div></footer>
+<script>document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear())</script>
+</body>
+</html>
