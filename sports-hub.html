@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sports Hub · Will Cromer</title>
 <meta name="description" content="How I built Sports Hub: a self-hosted Python + PostgreSQL sports data pipeline and dashboard.">
+<link rel="canonical" href="https://willcromer93.github.io/sports-hub.html">
+<meta property="og:title" content="Sports Hub · Will Cromer">
+<meta property="og:description" content="How I built Sports Hub: a self-hosted Python + PostgreSQL sports data pipeline and dashboard.">
+<meta property="og:url" content="https://willcromer93.github.io/sports-hub.html">
+<meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3EWC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -27,7 +32,7 @@
     <h1>Sports Hub</h1>
     <p class="lead">A self-hosted data pipeline and dashboard for the teams I follow: the Indiana Pacers, Purdue Boilermakers, Indianapolis Colts, and Detroit Red Wings. Python pulls data from three sports APIs into PostgreSQL, and it all runs 24/7 on a home server.</p>
     <div class="btns">
-      <a class="btn primary" href="https://sportshub.taildca027.ts.net/team" target="_blank" rel="noopener">
+      <a class="btn primary" href="https://sportshub.taildca027.ts.net/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>
         View live site
       </a>
@@ -103,7 +108,7 @@
     <div class="grid cols-3" style="margin-top:16px">
       <div class="card"><h3>1 · Extract</h3><p>Python scripts call the ESPN, balldontlie, and NHL APIs. A reusable helper, <code>extract_espn_fields()</code>, normalizes ESPN's nested JSON so every sport comes out in the same shape.</p></div>
       <div class="card"><h3>2 · Load</h3><p><code>db.py</code> writes to PostgreSQL through <code>psycopg2</code> with parameterized queries and <code>ON CONFLICT … DO UPDATE</code> upserts. The pipeline can re-run safely without creating duplicates.</p></div>
-      <div class="card"><h3>3 · Serve</h3><p>Postgres and the dashboard run on a home Linux server, reachable over Tailscale's encrypted network with HTTPS and no ports open on my router. Development happens on my Mac against a local Postgres copy.</p></div>
+      <div class="card"><h3>3 · Serve</h3><p>Postgres and the dashboard run on a home Linux server, reachable over Tailscale's encrypted network with HTTPS and no ports open on my router. The public dashboard is read-only and shared through Tailscale Funnel. Development happens on my Mac against a local Postgres copy.</p></div>
     </div>
   </div></section>
 
@@ -170,7 +175,7 @@
       </div>
     </div>
     <div class="btns" style="margin-top:28px">
-      <a class="btn primary" href="https://sportshub.taildca027.ts.net/team" target="_blank" rel="noopener">View live site ↗</a>
+      <a class="btn primary" href="https://sportshub.taildca027.ts.net/" target="_blank" rel="noopener">View live site ↗</a>
       <a class="btn" href="https://github.com/willcromer93/sports-hub" target="_blank" rel="noopener">GitHub repo ↗</a>
       <a class="btn" href="index.html#projects">← All projects</a>
     </div>
